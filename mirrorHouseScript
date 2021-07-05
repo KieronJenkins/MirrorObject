@@ -1,15 +1,19 @@
 import maya.cmds as cmds
-mirrorHouse()
-
 
 def mirrorHouse():
-    cmds.select( all=True )
+    houseTypes = ["VGLH_", "VGBH_"]
+ 
+    for i in houseTypes:
+        cmds.select( all=True )
+    
+    mainHouse = cmds.ls(sl=True, assemblies=True)
     cmds.scale( -1, 1, 1 )
+    cmds.makeIdentity(apply=True, translate=True, scale=True)
     cmds.spaceLocator(name="Nodes", p=(0, 0, 0) )
-    cmds.spaceLocator(name="BackDoorNode", p=(1, 1, 750) )
+    cmds.spaceLocator(name="BackDoorNode", p=(1, 100, 750) )
     cmds.select( 'BackDoorNode' )
     cmds.rotate( 0, "180deg", 0, r=True )
-    cmds.spaceLocator(name="FrontDoorNode", p=(1, 1, 750) )
+    cmds.spaceLocator(name="FrontDoorNode", p=(1, 100, 750) )
     cmds.select( 'FrontDoorNode' )
     cmds.parent( 'BackDoorNode', 'Nodes' )
     cmds.parent( 'FrontDoorNode', 'Nodes' )
@@ -17,6 +21,9 @@ def mirrorHouse():
     cmds.xform(centerPivots=True)
     cmds.select( 'BackDoorNode' )
     cmds.xform(centerPivots=True)
-    cmds.makeIdentity(apply=True, translate=True, scale=True)
+    cmds.parent( 'Nodes', mainHouse )
     cmds.delete(constructionHistory=True)
-    print("Nodes Created")
+    print("House Mirrored")
+    
+
+mirrorHouse()
